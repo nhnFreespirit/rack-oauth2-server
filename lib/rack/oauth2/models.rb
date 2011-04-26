@@ -50,8 +50,8 @@ module Rack
 end
 
 
-require "rack/oauth2/models/client"
-require "rack/oauth2/models/auth_request"
-require "rack/oauth2/models/access_grant"
-require "rack/oauth2/models/access_token"
+require "rack/oauth2/models/mongodb/client"
+require "rack/oauth2/models/mongodb/auth_request"
+require "rack/oauth2/models/mongodb/access_grant"
+require "rack/oauth2/models/mongodb/access_token"
 
