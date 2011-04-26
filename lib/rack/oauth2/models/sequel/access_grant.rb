@@ -60,6 +60,10 @@ module Rack
           self.revoked = Time.now
           save unless self.revoked
         end
+        
+        def expires_at
+          self[:expires_at].to_i
+        end
 
       end
 

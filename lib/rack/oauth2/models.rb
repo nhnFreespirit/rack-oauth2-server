@@ -40,7 +40,7 @@ module Rack
         end
  
        	def database
-      		raise 'No database Configured. You must configure it using Server.database = MongoDB::Connection.new()[db_name] ' unless @database
+      		raise 'No database Configured. You must configure it using Server.database = MongoDB::Connection.new()[db_name] ' unless @database or OAUTH_DATABASE == "sequel"
       		@database
  	 			end	
       end
@@ -49,9 +49,14 @@ module Rack
   end
 end
 
-
-require "rack/oauth2/models/mongodb/client"
-require "rack/oauth2/models/mongodb/auth_request"
-require "rack/oauth2/models/mongodb/access_grant"
-require "rack/oauth2/models/mongodb/access_token"
-
+if OAUTH_DATABASE == "sequel"
+  require "rack/oauth2/models/sequel/client"
+  require "rack/oauth2/models/sequel/auth_request"
+  require "rack/oauth2/models/sequel/access_grant"
+  require "rack/oauth2/models/sequel/access_token"
+else
+  require "rack/oauth2/models/mongodb/client"
+  require "rack/oauth2/models/mongodb/auth_request"
+  require "rack/oauth2/models/mongodb/access_grant"
+  require "rack/oauth2/models/mongodb/access_token"
+end
