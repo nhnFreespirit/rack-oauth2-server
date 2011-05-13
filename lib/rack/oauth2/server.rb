@@ -353,19 +353,11 @@ module Rack
             # 4.1.1.  Authorization Code
             grant = AccessGrant.from_code(request.POST["code"])
             raise InvalidGrantError, "Wrong client" unless grant && client.id == grant.client_id
-                       puts "1"
             unless client.redirect_uri.nil? || client.redirect_uri.to_s.empty?
-                         puts "2"
               raise InvalidGrantError, "Wrong redirect URI" unless grant.redirect_uri == Utils.parse_redirect_uri(request.POST["redirect_uri"]).to_s
-               puts "2.5"
             end
-             puts "2.75"
-             
-             puts "#{grant.expires_at} < #{Time.now.to_i}"
             raise InvalidGrantError, "This access grant expired" if grant.expires_at && grant.expires_at <= Time.now.to_i
-                       puts "3"
             access_token = grant.authorize!
-                       puts "4"
           when "password"
             raise UnsupportedGrantType unless options.authenticator
             # 4.1.2.  Resource Owner Password Credentials
@@ -431,7 +423,7 @@ module Rack
       def unauthorized(request, error = nil)
         challenge = 'OAuth realm="%s"' % (options.realm || request.host)
         challenge << ', error="%s", error_description="%s"' % [error.code, error.message] if error
-        return [401, { "WWW-Authenticate"=>challenge }, [error && error.message || ""]]
+        return [401, { "Content-Type"=>"text/plain", "WWW-Authenticate"=>challenge }, [error && error.message || ""]]
       end
 
       # Wraps Rack::Request to expose Basic and OAuth authentication
